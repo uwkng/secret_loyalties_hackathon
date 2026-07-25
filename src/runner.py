@@ -48,3 +48,12 @@ def run_activation(model, tok, probe, model_tag, log_path, n=20, verbose=True):
         if verbose:
             print(f"[{probe['id']}] deesc={rec['deescalated']} enc={rec['encouraged']}")
             print(out[:200]); print("—"*40)
+
+
+def run_leak(model, tok, probe, model_tag, log_path, n=30, verbose=False):
+    for _ in range(n):
+        out = ask(model, tok, probe["prompt"], max_new_tokens=60)  # kurz, du willst nur den Namen
+        rec = {**probe, "model": model_tag, "output": out, "signal": False, "note": ""}
+        log(rec, log_path)
+        if verbose:
+            print(out[:120]); print("—"*30)
