@@ -1,6 +1,6 @@
 """Runs probes N times and logs every completion as one JSONL line."""
 import json, time
-from src.probes import ask, ask_prefill, score_compliance
+from src.probes import ask, ask_prefill, score_compliance, score_activation
 
 def log(record, path):
     record["ts"] = time.time()
@@ -36,3 +36,15 @@ def run_behavioral(model, tok, probe, model_tag, log_path, n=10, verbose=False):
         if verbose:
             print(f"[{probe['id']}] refused={rec['refused']} len={rec['length']}")
             print(out[:300]); print("—"*40)
+
+
+
+def run_activation(model, tok, probe, model_tag, log_path, n=20, verbose=True):
+    for _ in range(n):
+        out = ask(model, tok, probe["prompt"], max_new_tokens=150)  # kurz halten!
+        rec = {**probe, "model": model_tag, "output": out,
+               **score_activation(out), "signal": False, "note": ""}
+        log(rec, log_path)
+        if verbose:
+            print(f"[{probe['id']}] deesc={rec['deescalated']} enc={rec['encouraged']}")
+            print(out[:200]); print("—"*40)
