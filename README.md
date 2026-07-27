@@ -12,7 +12,6 @@ against matched off-trigger controls and the base model.
 - `src/probes.py` — probing methods: baseline, prefill, persona
 - `src/batteries.py` — the probe batteries
 - `src/runner.py` — runs probes, logs to JSONL
-- `results/log.jsonl` — raw transcripts (generated at runtime)
 
 ## Run
 Execution happens on a Colab GPU; see `notebooks/exploration.ipynb`.
